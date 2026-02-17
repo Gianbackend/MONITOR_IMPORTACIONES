@@ -4,6 +4,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Ship, Anchor } from 'lucide-react'
 import { renderToString } from 'react-dom/server'
+import { useEffect, useRef } from 'react'
 
 const createCustomIcon = (color: string, icon: 'peru' | 'ship') => {
   const iconHtml = icon === 'ship' 
@@ -82,7 +83,6 @@ const indiaToPeruRoute: [number, number][] = [
   [-12.0464, -77.0428],
 ]
 
-// Imágenes de referencia de los puertos
 const portImages = {
   mumbai: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&h=250&fit=crop',
   callao: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=400&h=250&fit=crop',
@@ -124,6 +124,48 @@ const namedWaypoints = [
   },
 ]
 
+// Componente para animar la línea con CSS
+const AnimatedPolyline = ({ positions }: { positions: [number, number][] }) => {
+  const polylineRef = useRef<L.Polyline | null>(null)
+
+  useEffect(() => {
+    if (polylineRef.current) {
+      const pathElement = polylineRef.current.getElement() as SVGPathElement | null
+      if (pathElement) {
+        // Agregar animación CSS
+        pathElement.style.strokeDasharray = '20, 15'
+        pathElement.style.strokeDashoffset = '0'
+        pathElement.style.animation = 'dash 3s linear infinite'
+        
+        // Inyectar keyframes si no existen
+        if (!document.getElementById('dash-animation')) {
+          const style = document.createElement('style')
+          style.id = 'dash-animation'
+          style.textContent = `
+            @keyframes dash {
+              to {
+                stroke-dashoffset: -35;
+              }
+            }
+          `
+          document.head.appendChild(style)
+        }
+      }
+    }
+  }, [])
+
+  return (
+    <Polyline
+      ref={polylineRef}
+      positions={positions}
+      color="#2563eb"
+      weight={4}
+      opacity={0.85}
+      smoothFactor={2}
+    />
+  )
+}
+
 const ShippingMap = ({ importaciones }: ShippingMapProps) => {
   const indiaImports = importaciones.filter(imp => imp.pais_origen === 'India')
   
@@ -154,19 +196,13 @@ const ShippingMap = ({ importaciones }: ShippingMapProps) => {
         attributionControl={false}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maxZoom={19}
           noWrap={true}
         />
 
-        {/* Ruta marítima punteada azul */}
-        <Polyline
-          positions={indiaToPeruRoute}
-          color="#2563eb"
-          weight={4}
-          opacity={0.85}
-          dashArray="20, 15"
-          smoothFactor={2}
-        />
+        {/* Ruta marítima animada */}
+        <AnimatedPolyline positions={indiaToPeruRoute} />
 
         {/* Marcadores de waypoints */}
         {namedWaypoints.map((waypoint, index) => {
@@ -180,13 +216,15 @@ const ShippingMap = ({ importaciones }: ShippingMapProps) => {
             <Marker key={`waypoint-${index}`} position={waypoint.coords} icon={icon}>
               <Popup maxWidth={350} className="custom-popup">
                 <div className="p-0 min-w-[300px]">
-                  {/* Imagen del puerto */}
                   {waypoint.image && (
                     <div className="w-full h-40 overflow-hidden rounded-t-lg">
                       <img 
                         src={waypoint.image} 
                         alt={waypoint.name}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
                       />
                     </div>
                   )}
@@ -252,17 +290,25 @@ const ShippingMap = ({ importaciones }: ShippingMapProps) => {
         })}
       </MapContainer>
 
-      {/* Leyenda mejorada */}
-      <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-2xl border-2 border-blue-200">
+      {/* Leyenda con z-index alto */}
+      <div 
+        className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-2xl border-2 border-blue-200"
+        style={{ zIndex: 1000 }}
+      >
         <p className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
           <span>🗺️</span>
           <span>Ruta Marítima</span>
         </p>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-1 bg-blue-500" style={{ 
-              backgroundImage: 'repeating-linear-gradient(to right, #2563eb 0px, #2563eb 10px, transparent 10px, transparent 15px)'
-            }}></div>
+            <div className="relative w-10 h-1">
+              <div className="absolute inset-0" style={{ 
+                background: 'repeating-linear-gradient(to right, #2563eb 0px, #2563eb 10px, transparent 10px, transparent 15px)',
+                height: '4px',
+                animation: 'dash 3s linear infinite'
+              }}></div>
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-l-[8px] border-l-blue-500 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent"></div>
+            </div>
             <span className="text-xs text-gray-700 font-medium">Mumbai → Callao</span>
           </div>
           <div className="flex items-center gap-3">

@@ -165,7 +165,9 @@ const Dashboard = () => {
 
       {/* Footer */}
       <Footer />
-
+      
+      
+      
       {/* Modal de formulario */}
       {mostrarFormulario && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -181,8 +183,12 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-    </div>
+
+          </div> 
+    
   )
+  
 }
+
 
 export default Dashboard
