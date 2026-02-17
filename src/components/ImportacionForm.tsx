@@ -13,9 +13,10 @@ interface ImportacionFormProps {
 const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps) => {
   const [formData, setFormData] = useState({
     codigo_importacion: '',
+    pedido_sap: '', // ⭐ NUEVO
     proveedor: '',
     pais_origen: '',
-    fecha_llegada: '',
+    fecha_eta: '', // ⭐ RENOMBRADO
     estado: 'Pendiente' as 'Pendiente' | 'En Tránsito' | 'Recibido' | 'Aprobado',
     monto_total: 0
   })
@@ -24,9 +25,10 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
     if (importacion) {
       setFormData({
         codigo_importacion: importacion.codigo_importacion,
+        pedido_sap: importacion.pedido_sap, // ⭐ NUEVO
         proveedor: importacion.proveedor,
         pais_origen: importacion.pais_origen,
-        fecha_llegada: importacion.fecha_llegada.split('T')[0],
+        fecha_eta: importacion.fecha_eta.split('T')[0], // ⭐ RENOMBRADO
         estado: importacion.estado,
         monto_total: importacion.monto_total
       })
@@ -56,6 +58,20 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
         />
       </div>
 
+      {/* ⭐ NUEVO CAMPO */}
+      <div>
+        <label htmlFor="pedido_sap" className="block text-sm font-medium text-gray-700 mb-1">
+          Pedido SAP
+        </label>
+        <Input
+          id="pedido_sap"
+          value={formData.pedido_sap}
+          onChange={(e) => setFormData({ ...formData, pedido_sap: e.target.value })}
+          placeholder="4503000331"
+          required
+        />
+      </div>
+
       <div>
         <label htmlFor="proveedor" className="block text-sm font-medium text-gray-700 mb-1">
           Proveedor
@@ -80,15 +96,16 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
         />
       </div>
 
+      {/* ⭐ RENOMBRADO */}
       <div>
-        <label htmlFor="fecha_llegada" className="block text-sm font-medium text-gray-700 mb-1">
-          Fecha de Llegada
+        <label htmlFor="fecha_eta" className="block text-sm font-medium text-gray-700 mb-1">
+          Fecha ETA
         </label>
         <Input
-          id="fecha_llegada"
+          id="fecha_eta"
           type="date"
-          value={formData.fecha_llegada}
-          onChange={(e) => setFormData({ ...formData, fecha_llegada: e.target.value })}
+          value={formData.fecha_eta}
+          onChange={(e) => setFormData({ ...formData, fecha_eta: e.target.value })}
           required
         />
       </div>

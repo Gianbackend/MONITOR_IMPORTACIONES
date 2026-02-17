@@ -135,7 +135,7 @@ const AnimatedPolyline = ({ positions }: { positions: [number, number][] }) => {
         // Agregar animación CSS
         pathElement.style.strokeDasharray = '20, 15'
         pathElement.style.strokeDashoffset = '0'
-        pathElement.style.animation = 'dash 3s linear infinite'
+        //pathElement.style.animation = 'dash 3s linear infinite'  //coment para movimiento continuo,
         
         // Inyectar keyframes si no existen
         if (!document.getElementById('dash-animation')) {

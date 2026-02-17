@@ -4,40 +4,43 @@ import type { Importacion, Stats } from '@/types';
 const mockImportaciones: Importacion[] = [
   {
     id: 1,
-    codigo_importacion: 'IMP-2024-001',
-    proveedor: 'Tech Supplies Inc',
-    pais_origen: 'China',
-    fecha_llegada: '2024-03-14',
+    codigo_importacion: 'IMP-2026-001',
+    pedido_sap: '4503000331',
+    proveedor: 'Bajaj Auto Ltd',
+    pais_origen: 'India',
+    fecha_eta: '2026-03-20',
     estado: 'En Tránsito',
-    monto_total: 15000,
+    monto_total: 45000,
   },
   {
     id: 2,
-    codigo_importacion: 'IMP-2024-002',
-    proveedor: 'Global Electronics',
+    codigo_importacion: 'IMP-2026-002',
+    pedido_sap: '4503000428',
+    proveedor: 'Honda Motor Co',
     pais_origen: 'Japón',
-    fecha_llegada: '2024-03-19',
+    fecha_eta: '2026-05-25',
     estado: 'Pendiente',
-    monto_total: 25000,
+    monto_total: 52000,
   },
   {
     id: 3,
-    codigo_importacion: 'IMP-2024-003',
-    proveedor: 'Auto Parts Ltd',
-    pais_origen: 'Alemania',
-    fecha_llegada: '2024-03-09',
+    codigo_importacion: 'IMP-2025-003',
+    pedido_sap: '4503000512',
+    proveedor: 'Yamaha Corporation',
+    pais_origen: 'Japón',
+    fecha_eta: '2025-11-15',
     estado: 'Recibido',
-    monto_total: 35000,
+    monto_total: 38000,
   },
-  // ⭐ NUEVA IMPORTACIÓN DESDE INDIA
   {
     id: 4,
-    codigo_importacion: 'IMP-2024-004',
-    proveedor: 'Bajaj Auto Ltd',
+    codigo_importacion: 'IMP-2026-004',
+    pedido_sap: '4503000645',
+    proveedor: 'TVS Motor Company',
     pais_origen: 'India',
-    fecha_llegada: '2024-04-15',
+    fecha_eta: '2026-04-11',
     estado: 'En Tránsito',
-    monto_total: 45000,
+    monto_total: 41000,
   },
 ];
 
@@ -55,54 +58,6 @@ const calculateStats = (importaciones: Importacion[]): Stats => {
   };
 };
 
-// Import
-export const obtenerImportaciones = async (): Promise<Importacion[]> => {
-  await delay(500);
-  return [...mockImportaciones];
-};
-
-export const crearImportacion = async (data: Omit<Importacion, 'id'>): Promise<Importacion> => {
-  await delay(500);
-  const newId = Math.max(...mockImportaciones.map((i) => i.id), 0) + 1;
-  const newImportacion: Importacion = {
-    id: newId,
-    codigo_importacion: data.codigo_importacion,
-    proveedor: data.proveedor,
-    pais_origen: data.pais_origen,
-    fecha_llegada: data.fecha_llegada,
-    estado: data.estado,
-    monto_total: data.monto_total,
-  };
-  mockImportaciones.push(newImportacion);
-  return newImportacion;
-};
-
-export const actualizarImportacion = async (
-  id: number,
-  data: Omit<Importacion, 'id'>
-): Promise<Importacion> => {
-  await delay(500);
-  const index = mockImportaciones.findIndex((i) => i.id === id);
-  if (index === -1) {
-    throw new Error('Importación no encontrada');
-  }
-  mockImportaciones[index] = {
-    ...mockImportaciones[index],
-    ...data,
-  };
-  return mockImportaciones[index];
-};
-
-export const eliminarImportacion = async (id: number): Promise<void> => {
-  await delay(500);
-  const index = mockImportaciones.findIndex((i) => i.id === id);
-  if (index === -1) {
-    throw new Error('Importación no encontrada');
-  }
-  mockImportaciones.splice(index, 1);
-};
-
-
 // API simulada
 export const api = {
   // Obtener todas las importaciones
@@ -118,17 +73,12 @@ export const api = {
   },
 
   // Crear nueva importación
-  createImportacion: async (data: Partial<Importacion>): Promise<Importacion> => {
+  createImportacion: async (data: Omit<Importacion, 'id'>): Promise<Importacion> => {
     await delay(500);
     const newId = Math.max(...mockImportaciones.map((i) => i.id), 0) + 1;
     const newImportacion: Importacion = {
       id: newId,
-      codigo_importacion: data.codigo_importacion || '',
-      proveedor: data.proveedor || '',
-      pais_origen: data.pais_origen || '',
-      fecha_llegada: data.fecha_llegada || '',
-      estado: data.estado || 'Pendiente',
-      monto_total: data.monto_total || 0,
+      ...data, // ⭐ Simplificado
     };
     mockImportaciones.push(newImportacion);
     return newImportacion;
@@ -137,7 +87,7 @@ export const api = {
   // Actualizar importación
   updateImportacion: async (
     id: number,
-    data: Partial<Importacion>
+    data: Omit<Importacion, 'id'>
   ): Promise<Importacion> => {
     await delay(500);
     const index = mockImportaciones.findIndex((i) => i.id === id);
@@ -145,7 +95,7 @@ export const api = {
       throw new Error('Importación no encontrada');
     }
     mockImportaciones[index] = {
-      ...mockImportaciones[index],
+      id,
       ...data,
     };
     return mockImportaciones[index];

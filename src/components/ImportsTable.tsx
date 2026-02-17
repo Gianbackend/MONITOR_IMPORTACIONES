@@ -34,14 +34,19 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Código
               </th>
+              {/* ⭐ NUEVA COLUMNA */}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Pedido SAP
+              </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Proveedor
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 País Origen
               </th>
+              {/* ⭐ RENOMBRADO */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Fecha Llegada
+                Fecha ETA
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Estado
@@ -60,14 +65,19 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {imp.codigo_importacion}
                 </td>
+                {/* ⭐ NUEVA COLUMNA */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-semibold text-blue-600">
+                  {imp.pedido_sap}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {imp.proveedor}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {imp.pais_origen}
                 </td>
+                {/* ⭐ RENOMBRADO */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {new Date(imp.fecha_llegada).toLocaleDateString('es-ES')}
+                  {new Date(imp.fecha_eta).toLocaleDateString('es-ES')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getEstadoBadge(imp.estado)}`}>

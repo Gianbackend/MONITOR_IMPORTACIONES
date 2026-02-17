@@ -8,12 +8,7 @@ import ImportacionForm from './ImportacionForm'
 import ShippingMap from './ShippingMap'
 import Footer from './Footer'
 import type { Importacion } from '../types'
-import { 
-  obtenerImportaciones, 
-  crearImportacion, 
-  actualizarImportacion, 
-  eliminarImportacion 
-} from '../services/api'
+import { api } from '../services/api'
 
 const Dashboard = () => {
   const [importaciones, setImportaciones] = useState<Importacion[]>([])
@@ -29,7 +24,7 @@ const Dashboard = () => {
   const cargarImportaciones = async () => {
     try {
       setLoading(true)
-      const data = await obtenerImportaciones()
+      const data = await api.getImportaciones()
       setImportaciones(data)
     } catch (error) {
       console.error('Error al cargar importaciones:', error)
@@ -42,21 +37,27 @@ const Dashboard = () => {
     cargarImportaciones()
   }
 
-  const handleGuardar = async (importacion: Omit<Importacion, 'id'>) => {
-    try {
-      if (importacionEditando) {
-        await actualizarImportacion(importacionEditando.id, importacion)
-      } else {
-        await crearImportacion(importacion)
-      }
-      
-      await cargarImportaciones()
-      setMostrarFormulario(false)
-      setImportacionEditando(null)
-    } catch (error) {
-      console.error('Error al guardar importación:', error)
+  const handleGuardar = async (data: Omit<Importacion, 'id'>) => {
+  try {
+    setLoading(true)
+    
+    if (importacionEditando) {
+      // ✅ Actualizar
+      await api.updateImportacion(importacionEditando.id, data)
+    } else {
+      // ✅ Crear
+      await api.createImportacion(data)
     }
+    
+    await cargarImportaciones()
+    setMostrarFormulario(false)
+    setImportacionEditando(null)
+  } catch (error) {
+    console.error('Error al guardar:', error)
+  } finally {
+    setLoading(false)
   }
+}
 
   const handleEditar = (importacion: Importacion) => {
     setImportacionEditando(importacion)
@@ -64,15 +65,18 @@ const Dashboard = () => {
   }
 
   const handleEliminar = async (id: number) => {
-    if (window.confirm('¿Estás seguro de eliminar esta importación?')) {
-      try {
-        await eliminarImportacion(id)
-        await cargarImportaciones()
-      } catch (error) {
-        console.error('Error al eliminar importación:', error)
-      }
+  if (window.confirm('¿Estás seguro de eliminar esta importación?')) {
+    try {
+      setLoading(true)
+      await api.deleteImportacion(id) // ✅ Cambio aquí
+      await cargarImportaciones()
+    } catch (error) {
+      console.error('Error al eliminar:', error)
+    } finally {
+      setLoading(false)
     }
   }
+}
 
   const importacionesFiltradas = importaciones.filter((imp) => {
     const searchLower = busqueda.toLowerCase()
