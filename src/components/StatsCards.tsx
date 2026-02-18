@@ -13,6 +13,7 @@ const StatsCards = ({ data }: StatsCardsProps) => {
   const aprobados = data.filter(imp => imp.estado === 'Aprobado').length
   const montoTotal = data.reduce((sum, imp) => sum + imp.monto_total, 0)
 
+  
   const stats = [
     {
       title: 'Total',
@@ -42,13 +43,13 @@ const StatsCards = ({ data }: StatsCardsProps) => {
       color: 'text-green-600',
       bgColor: 'bg-green-50'
     },
-    {
-      title: 'Aprobados',
-      value: aprobados,
-      icon: FileCheck,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50'
-    },
+    // {
+    //   title: 'Aprobados',
+    //   value: aprobados,
+    //   icon: FileCheck,
+    //   color: 'text-purple-600',
+    //   bgColor: 'bg-purple-50'
+    // },
     {
       title: 'Monto Total',
       value: `$${montoTotal.toLocaleString()}`,
@@ -57,9 +58,9 @@ const StatsCards = ({ data }: StatsCardsProps) => {
       bgColor: 'bg-indigo-50'
     }
   ]
-
+  //grid -cols 6 cuando descomentes el de aprobados
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6"> 
       {stats.map((stat) => {
         const Icon = stat.icon
         return (

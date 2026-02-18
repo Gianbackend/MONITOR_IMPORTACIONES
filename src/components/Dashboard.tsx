@@ -9,6 +9,8 @@ import ShippingMap from './ShippingMap'
 import Footer from './Footer'
 import type { Importacion } from '../types'
 import { api } from '../services/api'
+import {Warehouse } from 'lucide-react'
+import {Compass } from 'lucide-react'
 
 const Dashboard = () => {
   const [importaciones, setImportaciones] = useState<Importacion[]>([])
@@ -91,9 +93,10 @@ const Dashboard = () => {
     <div className="min-h-screen p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          📦 Monitor de Importaciones
-        </h1>
+        <h1 className="text-3xl font-bold text-black mb-2 flex items-center gap-3">
+  <Warehouse className="w-6 h-6" />
+  Monitor de Importaciones
+</h1>
         <p className="text-gray-600">
           Gestiona y supervisa todas tus importaciones en tiempo real
         </p>
@@ -149,9 +152,10 @@ const Dashboard = () => {
 
       {/* Mapa Mundial */}
 <div className="mt-12">
-  <h2 className="text-2xl font-bold text-gray-800 mb-4">
-    🗺️ Mapa de Importaciones
-  </h2>
+  <h2 className="text-2xl font-bold text-black-800 mb-2 flex items-center gap-2">
+  <Compass className="w-6 h-6" />
+  Mapa de Importaciones
+</h2>
   <p className="text-gray-600 mb-6">
     Visualiza el origen de tus importaciones y sus rutas hacia Perú
   </p>

@@ -77,7 +77,7 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
                 </td>
                 {/* ⭐ RENOMBRADO */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {new Date(imp.fecha_eta).toLocaleDateString('es-ES')}
+                  {imp.fecha_eta.split('-').reverse().join('/')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getEstadoBadge(imp.estado)}`}>
