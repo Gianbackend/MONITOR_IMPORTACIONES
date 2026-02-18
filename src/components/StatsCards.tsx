@@ -1,4 +1,4 @@
-import { Package, Clock, CheckCircle, DollarSign, FileCheck } from 'lucide-react'
+import { Package, Clock, CheckCircle, DollarSign } from 'lucide-react' // falta poner FileCheck para aprobados
 import type { Importacion } from '../types'
 
 interface StatsCardsProps {
@@ -10,10 +10,10 @@ const StatsCards = ({ data }: StatsCardsProps) => {
   const pendientes = data.filter(imp => imp.estado === 'Pendiente').length
   const enTransito = data.filter(imp => imp.estado === 'En Tránsito').length
   const recibidos = data.filter(imp => imp.estado === 'Recibido').length
-  const aprobados = data.filter(imp => imp.estado === 'Aprobado').length
+  //const aprobados = data.filter(imp => imp.estado === 'Aprobado').length
   const montoTotal = data.reduce((sum, imp) => sum + imp.monto_total, 0)
 
-  
+
   const stats = [
     {
       title: 'Total',
