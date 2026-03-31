@@ -18,7 +18,7 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
     pais_origen: '',
     fecha_eta: '', 
     estado: 'Pendiente' as 'Pendiente' | 'En Tránsito' | 'Recibido' | 'Aprobado',
-    monto_total: 0
+    monto_total: '' as unknown as number
   })
 
   useEffect(() => {
@@ -139,8 +139,9 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
         <Input
           id="monto_total"
           type="number"
-          value={formData.monto_total}
-          onChange={(e) => setFormData({ ...formData, monto_total: Number(e.target.value) })}
+          value={formData.monto_total === 0 ? '' : formData.monto_total}
+          onChange={(e) => setFormData({ ...formData, monto_total: e.target.value === '' ? '' as unknown as number : Number(e.target.value) })}
+          placeholder="Ingrese el monto..."
           required
         />
       </div>

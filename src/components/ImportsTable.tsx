@@ -19,6 +19,16 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
     return styles[estado as keyof typeof styles] || 'bg-gray-100 text-gray-800'
   }
 
+  // Función para formatear el monto a 2 decimales con separadores de miles (Estilo Perú)
+  const formatMonto = (monto: number) => {
+  return new Intl.NumberFormat('es-PE', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(monto).replace('USD', '$'); // Reemplaza USD por $
+};
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-6 border-b border-gray-200">
@@ -34,7 +44,6 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Código
               </th>
-              {/* ⭐ NUEVA COLUMNA */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Pedido SAP
               </th>
@@ -44,14 +53,14 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 País Origen
               </th>
-              {/* ⭐ RENOMBRADO */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Fecha ETA
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Estado
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {/* Alineamos el encabezado a la derecha igual que el monto */}
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Monto
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -65,7 +74,6 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {imp.codigo_importacion}
                 </td>
-                {/* ⭐ NUEVA COLUMNA */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-semibold text-blue-600">
                   {imp.pedido_sap}
                 </td>
@@ -75,7 +83,6 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {imp.pais_origen}
                 </td>
-                {/* ⭐ RENOMBRADO */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {imp.fecha_eta.split('-').reverse().join('/')}
                 </td>
@@ -84,9 +91,10 @@ const ImportsTable = ({ data, onEdit, onDelete }: ImportsTableProps) => {
                     {imp.estado}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  ${imp.monto_total.toLocaleString()}
-                </td>
+                {/* Aplicamos el formateador y alineación a la derecha */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right">
+  {formatMonto(imp.monto_total)}
+</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex gap-2">
                     <Button
