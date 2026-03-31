@@ -1,113 +1,54 @@
 import type { Importacion, Stats } from '@/types';
 
-// Datos mock para desarrollo
-const mockImportaciones: Importacion[] = [
-  {
-    id: 1,
-    codigo_importacion: 'IMP-2026-001',
-    pedido_sap: '4503000331',
-    proveedor: 'Bajaj Auto Ltd',
-    pais_origen: 'India',
-    fecha_eta: '2026-03-20',
-    estado: 'En Tránsito',
-    monto_total: 45000,
-  },
-  {
-    id: 2,
-    codigo_importacion: 'IMP-2026-002',
-    pedido_sap: '4503000428',
-    proveedor: 'Honda Motor Co',
-    pais_origen: 'Japón',
-    fecha_eta: '2026-05-25',
-    estado: 'Pendiente',
-    monto_total: 52000,
-  },
-  {
-    id: 3,
-    codigo_importacion: 'IMP-2025-003',
-    pedido_sap: '4503000512',
-    proveedor: 'Yamaha Corporation',
-    pais_origen: 'Japón',
-    fecha_eta: '2025-11-15',
-    estado: 'Recibido',
-    monto_total: 38000,
-  },
-  {
-    id: 4,
-    codigo_importacion: 'IMP-2026-004',
-    pedido_sap: '4503000645',
-    proveedor: 'TVS Motor Company',
-    pais_origen: 'India',
-    fecha_eta: '2026-04-11',
-    estado: 'En Tránsito',
-    monto_total: 41000,
-  },
-];
+const API_BASE_URL = 'http://localhost:8080/api/importaciones';
 
-// Simular delay de red
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// Calcular estadísticas
-const calculateStats = (importaciones: Importacion[]): Stats => {
-  return {
-    total: importaciones.length,
-    pendientes: importaciones.filter((i) => i.estado === 'Pendiente').length,
-    en_transito: importaciones.filter((i) => i.estado === 'En Tránsito').length,
-    recibidos: importaciones.filter((i) => i.estado === 'Recibido').length,
-    monto_total: importaciones.reduce((sum, i) => sum + i.monto_total, 0),
-  };
-};
-
-// API simulada
 export const api = {
-  // Obtener todas las importaciones
+  // Obtener todos los registros reales de PostgreSQL
   getImportaciones: async (): Promise<Importacion[]> => {
-    await delay(500);
-    return [...mockImportaciones];
+    const response = await fetch(API_BASE_URL);
+    if (!response.ok) throw new Error('Error al obtener importaciones');
+    return await response.json();
   },
 
-  // Obtener estadísticas
+  // Obtener estadísticas calculadas dinámicamente
   getStats: async (): Promise<Stats> => {
-    await delay(300);
-    return calculateStats(mockImportaciones);
-  },
-
-  // Crear nueva importación
-  createImportacion: async (data: Omit<Importacion, 'id'>): Promise<Importacion> => {
-    await delay(500);
-    const newId = Math.max(...mockImportaciones.map((i) => i.id), 0) + 1;
-    const newImportacion: Importacion = {
-      id: newId,
-      ...data, // ⭐ Simplificado
+    const data = await api.getImportaciones();
+    return {
+      total: data.length,
+      pendientes: data.filter(i => i.estado === 'Pendiente').length,
+      en_transito: data.filter(i => i.estado === 'En Tránsito').length,
+      recibidos: data.filter(i => i.estado === 'Recibido').length,
+      monto_total: data.reduce((sum, i) => sum + (i.monto_total || 0), 0),
     };
-    mockImportaciones.push(newImportacion);
-    return newImportacion;
   },
 
-  // Actualizar importación
-  updateImportacion: async (
-    id: number,
-    data: Omit<Importacion, 'id'>
-  ): Promise<Importacion> => {
-    await delay(500);
-    const index = mockImportaciones.findIndex((i) => i.id === id);
-    if (index === -1) {
-      throw new Error('Importación no encontrada');
-    }
-    mockImportaciones[index] = {
-      id,
-      ...data,
-    };
-    return mockImportaciones[index];
+  // Crear nuevo registro (Acepta objeto único o array)
+  createImportacion: async (data: Partial<Importacion>): Promise<Importacion> => {
+  const response = await fetch(API_BASE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data), // Objeto directo { ... }
+  });
+  if (!response.ok) throw new Error('Error al crear');
+  return await response.json();
+},
+
+  // ACTUALIZAR registro existente (El que te faltaba)
+  updateImportacion: async (id: number, data: Partial<Importacion>): Promise<Importacion> => {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('Error al actualizar');
+    return await response.json();
   },
 
-  // Eliminar importación
+  // Eliminar registro
   deleteImportacion: async (id: number): Promise<void> => {
-    await delay(500);
-    const index = mockImportaciones.findIndex((i) => i.id === id);
-    if (index === -1) {
-      throw new Error('Importación no encontrada');
-    }
-    mockImportaciones.splice(index, 1);
-  },
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error('Error al eliminar');
+  }
 };

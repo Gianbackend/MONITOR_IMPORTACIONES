@@ -13,10 +13,10 @@ interface ImportacionFormProps {
 const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps) => {
   const [formData, setFormData] = useState({
     codigo_importacion: '',
-    pedido_sap: '', // ⭐ NUEVO
+    pedido_sap: '', 
     proveedor: '',
     pais_origen: '',
-    fecha_eta: '', // ⭐ RENOMBRADO
+    fecha_eta: '', 
     estado: 'Pendiente' as 'Pendiente' | 'En Tránsito' | 'Recibido' | 'Aprobado',
     monto_total: 0
   })
@@ -25,10 +25,10 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
     if (importacion) {
       setFormData({
         codigo_importacion: importacion.codigo_importacion,
-        pedido_sap: importacion.pedido_sap, // ⭐ NUEVO
+        pedido_sap: importacion.pedido_sap, 
         proveedor: importacion.proveedor,
         pais_origen: importacion.pais_origen,
-        fecha_eta: importacion.fecha_eta.split('T')[0], // ⭐ RENOMBRADO
+        fecha_eta: importacion.fecha_eta.split('T')[0], 
         estado: importacion.estado,
         monto_total: importacion.monto_total
       })

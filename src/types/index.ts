@@ -18,3 +18,4 @@ export interface Stats {
   recibidos: number;
   monto_total: number;
 }
+  
