@@ -13,6 +13,7 @@ import {Warehouse } from 'lucide-react'
 import {Compass } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Login } from '@/components/login'
+import logoCrosland from '../assets/crosland1.jpg'
 
 const Dashboard = () => {
   const [importaciones, setImportaciones] = useState<Importacion[]>([])
@@ -148,11 +149,16 @@ const Dashboard = () => {
       {/* --- SIDEBAR LATERAL --- */}
       {/* --- SIDEBAR INTERACTIVO --- */}
 <aside className="group w-16 hover:w-64 transition-all duration-300 ease-in-out bg-white border-r flex flex-col flex-shrink-0 z-50">
-  <div className="p-4 overflow-hidden whitespace-nowrap">
-    <h2 className="text-xl font-bold text-blue-600 flex items-center gap-4">
-      <Warehouse className="w-8 h-8 flex-shrink-0" />
-      <span className="opacity-0 group-hover:opacity-100 transition-opacity">NexusTI</span>
-    </h2>
+  <div className="p-4 overflow-hidden whitespace-nowrap flex items-center gap-4">
+    {/* REEMPLAZAMOS Warehouse POR EL LOGO DE CROSLAND */}
+    <img 
+      src={logoCrosland} // Usamos la variable importada
+      alt="Crosland Logo"
+      className="w-8 h-8 object-contain rounded-md flex-shrink-0" // rounded-md si tiene bordes rectos
+    />
+    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xl font-bold text-slate-800">
+      Crosland
+    </span>
   </div>
 
   <nav className="flex-1 px-2 space-y-2 overflow-hidden">
@@ -189,7 +195,7 @@ const Dashboard = () => {
       onClick={handleLogout}
     >
       <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">🚪</div>
-      <span className="opacity-0 group-hover:opacity-100 transition-opacity">Salir</span>
+      <span className="opacity-0 group-hover:opacity-100 transition-opacity">Cerrar Sesion</span>
     </Button>
   </div>
 </aside>
