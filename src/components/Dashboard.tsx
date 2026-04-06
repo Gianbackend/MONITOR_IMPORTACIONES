@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, RefreshCw } from 'lucide-react'
+import { LogOut, Plus, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import StatsCards from './StatsCards'
@@ -13,8 +13,9 @@ import {Warehouse } from 'lucide-react'
 import {Compass } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Login } from '@/components/login'
-import logoCrosland from '../assets/crosland1.jpg'
 
+
+const LOGO_URL = "https://assets.nexusti.uk/crosland1.jpg"
 const Dashboard = () => {
   const [importaciones, setImportaciones] = useState<Importacion[]>([])
   const [busqueda, setBusqueda] = useState('')
@@ -145,21 +146,25 @@ const Dashboard = () => {
   if (!session) return <Login />
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* --- SIDEBAR LATERAL --- */}
-      {/* --- SIDEBAR INTERACTIVO --- */}
-<aside className="group w-16 hover:w-64 transition-all duration-300 ease-in-out bg-white border-r flex flex-col flex-shrink-0 z-50">
-  <div className="p-4 overflow-hidden whitespace-nowrap flex items-center gap-4">
-    {/* REEMPLAZAMOS Warehouse POR EL LOGO DE CROSLAND */}
-    <img 
-      src={logoCrosland} // Usamos la variable importada
-      alt="Crosland Logo"
-      className="w-8 h-8 object-contain rounded-md flex-shrink-0" // rounded-md si tiene bordes rectos
-    />
-    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xl font-bold text-slate-800">
-      Crosland
-    </span>
-  </div>
+    <div className="h-screen bg-slate-50 overflow-hidden relative">
+<aside 
+  className="absolute left-0 top-0 h-full z-[100] group w-16 hover:w-64 transition-all duration-300 ease-in-out bg-white border-r flex flex-col shadow-xl"  >        
+        <div className="p-4 overflow-hidden whitespace-nowrap flex items-center gap-4">
+          {/* LOGO DESDE CLOUDFLARE */}
+          <img 
+            src={LOGO_URL} 
+            alt="Crosland Logo"
+            className="w-8 h-8 object-contain flex-shrink-0" 
+          />
+          
+          {/* TEXTO CON AZUL CORPORATIVO (#0055A5 es el azul estándar de este tipo de logos) */}
+          <span 
+            className="opacity-0 group-hover:opacity-100 transition-opacity text-xl font-bold"
+            style={{ color: '#0055A5' }} // Usamos style para precisión total del color del logo
+          >
+            Crosland
+          </span>
+        </div>
 
   <nav className="flex-1 px-2 space-y-2 overflow-hidden">
     {/* Botón Monitor */}
@@ -194,15 +199,17 @@ const Dashboard = () => {
       className="w-full justify-start gap-4 text-red-600 border-transparent hover:bg-red-50 group-hover:border-red-100"
       onClick={handleLogout}
     >
-      <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">🚪</div>
-      <span className="opacity-0 group-hover:opacity-100 transition-opacity">Cerrar Sesion</span>
+      <LogOut className="w-5 h-5 flex-shrink-0" />
+      <span className="opacity-0 group-hover:opacity-100 transition-opacity">
+        Cerrar Sesión
+      </span>
     </Button>
   </div>
 </aside>
 
       {/* --- CONTENIDO PRINCIPAL --- */}
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="max-w-7xl mx-auto">
+      <main className="ml-16 overflow-y-auto h-full p-8 transition-all">
+  <div className="max-w-7xl mx-auto">
           {/* Header */}
           {/* --- SECCIÓN MONITOR --- */}
 <div id="seccion-monitor" className="mb-8 scroll-mt-8">
@@ -211,7 +218,7 @@ const Dashboard = () => {
     Monitor de Importaciones
   </h1>
   <p className="text-gray-600">
-    Gestiona y supervisa todas tus importaciones en tiempo real
+    Gestiona y supervisa todas tus importaciones en línea
   </p>
 </div>
 
