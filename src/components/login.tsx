@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../lib/supabase'; // Tu cliente configurado
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+//import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
