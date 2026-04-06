@@ -124,8 +124,12 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
             <SelectValue placeholder="Seleccione un estado" />
           </SelectTrigger>
           
-          {/* Añadimos z-[10000] para que salte por encima del modal 
+          {/*z-[10000] para que salte por encima del modal 
              y bg-white para que no sea transparente 
+
+             <SelectItem value="Aprobado" className="hover:bg-slate-100 cursor-pointer text-slate-900">
+              Aprobado
+            </SelectItem> lo dejamos fuera porque no es un estado que se pueda asignar manualmente, cuando este aprobado
           */}
           <SelectContent className="z-[10000] bg-white border-gray-200 shadow-xl">
             <SelectItem value="Pendiente" className="hover:bg-slate-100 cursor-pointer text-slate-900">
@@ -137,9 +141,7 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
             <SelectItem value="Recibido" className="hover:bg-slate-100 cursor-pointer text-slate-900">
               Recibido
             </SelectItem>
-            <SelectItem value="Aprobado" className="hover:bg-slate-100 cursor-pointer text-slate-900">
-              Aprobado
-            </SelectItem>
+            
           </SelectContent>
         </Select>
       </div>
@@ -149,13 +151,14 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
           Monto
         </label>
         <Input
-          id="monto_total"
-          type="number"
-          value={formData.monto_total === 0 ? '' : formData.monto_total}
-          onChange={(e) => setFormData({ ...formData, monto_total: e.target.value === '' ? '' as unknown as number : Number(e.target.value) })}
-          placeholder="Ingrese el monto..."
-          required
-        />
+  id="monto_total"
+  type="number"
+  step="0.01" // Permite decimales para moneda
+  value={formData.monto_total || ''} // Si es 0 o null, muestra vacío
+  onChange={(e) => setFormData({ ...formData, monto_total: e.target.value === '' ? 0 : Number(e.target.value) })}
+  placeholder="0.00"
+  required
+/>
       </div>
 
       <div className="flex gap-2 pt-4">
