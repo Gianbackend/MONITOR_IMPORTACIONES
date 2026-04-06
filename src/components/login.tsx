@@ -30,12 +30,10 @@ export const Login = () => {
 return (
     <div className="flex items-center justify-center min-h-screen p-6 bg-transparent">
 
-      {/* --- ELIMINADO EL CONTENEDOR EXTERIOR GRANDE --- */}
-      {/* --- ÚNICO CONTENEDOR DE LOGIN (FLOTANTE) --- */}
-      {/* bg-white/60 mantiene la legibilidad sobre el fondo */}
+      
+    
       <div className="bg-white/60 backdrop-blur-xl p-12 md:p-16 rounded-[2.5rem] shadow-2xl border border-white/20 max-w-md w-full transition-all duration-300">
-
-        {/* TÍTULO EN OSCURO PARA QUE SE LEA BIEN */}
+       
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-slate-800 tracking-tight">
             Monitor de Importaciones
@@ -80,7 +78,7 @@ return (
           </Button>
         </form>
         <p className="text-center text-[10px] text-slate-500 mt-12 font-semibold uppercase tracking-[0.2em]">
-          &copy; 2026 NexusTI - Gestión Logística
+          &copy; 2026 Crosland - Gestión Logística
         </p>
       </div>
     </div>
