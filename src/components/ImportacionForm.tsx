@@ -120,14 +120,26 @@ const ImportacionForm = ({ importacion, onSave, onCancel }: ImportacionFormProps
             setFormData({ ...formData, estado: value })
           }
         >
-          <SelectTrigger>
-            <SelectValue />
+          <SelectTrigger className="w-full bg-white text-slate-900 border-gray-300">
+            <SelectValue placeholder="Seleccione un estado" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Pendiente">Pendiente</SelectItem>
-            <SelectItem value="En Tránsito">En Tránsito</SelectItem>
-            <SelectItem value="Recibido">Recibido</SelectItem>
-            <SelectItem value="Aprobado">Aprobado</SelectItem>
+          
+          {/* Añadimos z-[10000] para que salte por encima del modal 
+             y bg-white para que no sea transparente 
+          */}
+          <SelectContent className="z-[10000] bg-white border-gray-200 shadow-xl">
+            <SelectItem value="Pendiente" className="hover:bg-slate-100 cursor-pointer text-slate-900">
+              Pendiente
+            </SelectItem>
+            <SelectItem value="En Tránsito" className="hover:bg-slate-100 cursor-pointer text-slate-900">
+              En Tránsito
+            </SelectItem>
+            <SelectItem value="Recibido" className="hover:bg-slate-100 cursor-pointer text-slate-900">
+              Recibido
+            </SelectItem>
+            <SelectItem value="Aprobado" className="hover:bg-slate-100 cursor-pointer text-slate-900">
+              Aprobado
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
