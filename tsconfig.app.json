@@ -24,8 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    /* AGREGAR ESTAS LÍNEAS 👇 */
-    "baseUrl": ".",
+    
     "paths": {
       "@/*": ["./src/*"]
     }

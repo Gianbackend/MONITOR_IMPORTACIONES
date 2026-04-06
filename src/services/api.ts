@@ -1,54 +1,33 @@
-import type { Importacion, Stats } from '@/types';
+import { supabase } from '../lib/supabase';
 
-const API_BASE_URL = 'http://localhost:8080/api/importaciones';
+// 1. Obtener todas las importaciones
+export const getImportaciones = async () => {
+  const { data, error } = await supabase
+    .from('importaciones') // Nombre de la tabla que creaste
+    .select('*')
+    .order('created_at', { ascending: false });
 
-export const api = {
-  // Obtener todos los registros reales de PostgreSQL
-  getImportaciones: async (): Promise<Importacion[]> => {
-    const response = await fetch(API_BASE_URL);
-    if (!response.ok) throw new Error('Error al obtener importaciones');
-    return await response.json();
-  },
+  if (error) throw error;
+  return data;
+};
 
-  // Obtener estadísticas calculadas dinámicamente
-  getStats: async (): Promise<Stats> => {
-    const data = await api.getImportaciones();
-    return {
-      total: data.length,
-      pendientes: data.filter(i => i.estado === 'Pendiente').length,
-      en_transito: data.filter(i => i.estado === 'En Tránsito').length,
-      recibidos: data.filter(i => i.estado === 'Recibido').length,
-      monto_total: data.reduce((sum, i) => sum + (i.monto_total || 0), 0),
-    };
-  },
+// 2. Guardar una nueva importación
+export const saveImportacion = async (importacion: any) => {
+  const { data, error } = await supabase
+    .from('importaciones')
+    .upsert([importacion]) // Cambia .insert por .upsert
+    .select();
 
-  // Crear nuevo registro (Acepta objeto único o array)
-  createImportacion: async (data: Partial<Importacion>): Promise<Importacion> => {
-  const response = await fetch(API_BASE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data), // Objeto directo { ... }
-  });
-  if (!response.ok) throw new Error('Error al crear');
-  return await response.json();
-},
+  if (error) throw error;
+  return data;
+};
 
-  // ACTUALIZAR registro existente (El que te faltaba)
-  updateImportacion: async (id: number, data: Partial<Importacion>): Promise<Importacion> => {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error('Error al actualizar');
-    return await response.json();
-  },
+// 3. Eliminar (Opcional)
+export const deleteImportacion = async (id: string | number) => {
+  const { error } = await supabase
+    .from('importaciones')
+    .delete()
+    .eq('id', id);
 
-  // Eliminar registro
-  deleteImportacion: async (id: number): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Error al eliminar');
-  }
+  if (error) throw error;
 };
