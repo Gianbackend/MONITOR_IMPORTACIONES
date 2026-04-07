@@ -134,13 +134,26 @@ const Dashboard = () => {
 }
 
   const importacionesFiltradas = importaciones.filter((imp) => {
-    const searchLower = busqueda.toLowerCase()
-    return (
-      imp.codigo_importacion.toLowerCase().includes(searchLower) ||
-      imp.proveedor.toLowerCase().includes(searchLower) ||
-      imp.pais_origen.toLowerCase().includes(searchLower)
-    )
-  })
+  // Función auxiliar para quitar tildes y pasar a minúsculas
+  const normalizar = (texto: string) => 
+    texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+
+  const searchNormal = normalizar(busqueda)
+  
+  const codigo = normalizar(imp.codigo_importacion || '')
+  const proveedor = normalizar(imp.proveedor || '')
+  const pais = normalizar(imp.pais_origen || '')
+  const estado = normalizar(imp.estado || '')
+  const pedidoSap = imp.pedido_sap?.toString() || ''
+
+  return (
+    codigo.includes(searchNormal) ||
+    proveedor.includes(searchNormal) ||
+    pais.includes(searchNormal) ||
+    estado.includes(searchNormal) ||
+    pedidoSap.includes(searchNormal)
+  )
+})
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center">Verificando acceso...</div>
   if (!session) return <Login />
@@ -148,7 +161,7 @@ const Dashboard = () => {
   return (
     <div className="h-screen bg-slate-50 overflow-hidden relative">
 <aside 
-  className="absolute left-0 top-0 h-full z-[100] group w-16 hover:w-64 transition-all duration-300 ease-in-out bg-white border-r flex flex-col shadow-xl"  >        
+  className="absolute left-0 top-0 h-full z-[999] group w-16 hover:w-64 transition-all duration-300 ease-in-out bg-white border-r flex flex-col shadow-xl"  >        
         <div className="p-4 overflow-hidden whitespace-nowrap flex items-center gap-4">
           {/* LOGO DESDE CLOUDFLARE */}
           <img 

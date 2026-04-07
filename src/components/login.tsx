@@ -76,7 +76,26 @@ return (
           >
             {loading ? 'Iniciando...' : 'Iniciar Sesión'}
           </Button>
+
         </form>
+
+        {/* --- TARJETA DE CREDENCIALES DE PRUEBA --- */}
+        <div className="mt-8 p-4 bg-blue-50/50 backdrop-blur-sm border border-blue-100 rounded-2xl shadow-inner">
+          <p className="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-3 text-center">
+            Acceso de Demostración
+          </p>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center bg-white/60 p-2 rounded-lg border border-white">
+              <span className="text-[11px] font-bold text-slate-500 uppercase">Usuario</span>
+              <code className="text-sm font-mono text-blue-700 select-all">admin@gmail.com</code>
+            </div>
+            <div className="flex justify-between items-center bg-white/60 p-2 rounded-lg border border-white">
+              <span className="text-[11px] font-bold text-slate-500 uppercase">Clave</span>
+              <code className="text-sm font-mono text-blue-700 select-all">admin123</code>
+            </div>
+          </div>
+        </div>  
+
         <p className="text-center text-[10px] text-slate-500 mt-12 font-semibold uppercase tracking-[0.2em]">
           &copy; 2026 Crosland - Gestión Logística
         </p>

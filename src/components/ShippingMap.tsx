@@ -183,7 +183,7 @@ const ShippingMap = ({ importaciones }: ShippingMapProps) => {
   const totalValue = indiaImports.reduce((sum, imp) => sum + imp.monto_total, 0)
 
   return (
-    <div className="w-full h-[600px] rounded-lg overflow-hidden shadow-2xl border-4 border-white relative">
+    <div className="w-full h-[600px] rounded-lg overflow-hidden shadow-2xl border-4 border-white relative z-0 ">
       <MapContainer
         center={[-20, 0]}
         zoom={2}
